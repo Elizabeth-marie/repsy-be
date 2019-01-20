@@ -12,6 +12,6 @@ exports.seed = function(knex, Promise) {
     })
     .then(function () {
       //Moves id column (PK) auto-incremented to correct value after inserts
-      return knex.raw(`SELECT setval('quizzes_id_seq', (SELECT MAX(id) FROM quizzes))`)
+      return knex.raw(`SELECT setval('reps_id_seq', (SELECT MAX(id) FROM reps))`)
     })
 }
