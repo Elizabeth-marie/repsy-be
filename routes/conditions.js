@@ -86,6 +86,7 @@ router.post('/', validatePostBody, (req, res, next) => {
 })
 //
 // /* PATCH specified users record */
+//http patch http://localhost:3000/conditions/1 name='leg Cancer' specialties_id=1
 router.patch('/:id', validateConditionsID, buildPatchReq, (req, res, next) => {
   const {patchReq} = req
 
@@ -100,11 +101,12 @@ router.patch('/:id', validateConditionsID, buildPatchReq, (req, res, next) => {
 })
 //
 // /* DELETE specified users record */
-// router.delete('/:id', validateConditionsID, (req, res, next) => {
-//   knex('users').where('id', req.params.id).first().del().returning('*').then(([data]) => {
-//     console.log('deleted', data)
-//     res.status(200).json({deleted: data})
-//   })
-// })
+// http delete  http://localhost:3000/conditions/2
+router.delete('/:id', validateConditionsID, (req, res, next) => {
+  knex('conditions').where('id', req.params.id).first().del().returning('*').then(([data]) => {
+    console.log('deleted', data)
+    res.status(200).json({deleted: data})
+  })
+})
 
 module.exports = router
