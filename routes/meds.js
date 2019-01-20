@@ -18,23 +18,24 @@ const validateUserID = (req, res, next) => {
   })
 }
 
-// /* Uses joi to validate data types */
-// const validatePostBody = (req, res, next) => {
-//   const postSchema = Joi.object().keys({
-//     fname: Joi.string().required(),
-//     lname: Joi.string().required(),
-//     login_code: Joi.string(),
-//     quiz_points: Joi.integer()
-//   })
-//
-//   const { error } = Joi.validate(req.body, postSchema)
-//
-//   if (error) {
-//     return res.status(400).json({ "POST Schema Error": { message: error.details[0].message } })
-//   }
-//   next()
-// }
-//
+/* Uses joi to validate data types */
+const validatePostBody = (req, res, next) => {
+  const postSchema = Joi.object().keys({
+    generic_name: Joi.string().required(),
+    brand_name: Joi.string().required(),
+    pharma_company: Joi.string(),
+    info: Joi.string(),
+    photo: Joi.string(),
+  })
+
+  const { error } = Joi.validate(req.body, postSchema)
+
+  if (error) {
+    return res.status(400).json({ "POST Schema Error": { message: error.details[0].message } })
+  }
+  next()
+}
+
 // /* Uses joi to build a patch request */
 // const buildPatchReq = (req, res, next) => {
 //   const patchSchema = Joi.object().keys({
@@ -78,14 +79,14 @@ router.get('/', (req, res, next) => {
 router.get('/:id', validateUserID, (req, res, next) => {
   knex('meds').where('id', req.params.id).then(([data]) => res.status(200).json(data)).catch(err => next(err))
 })
-//
-// /* POST new users record */
-// router.post('/', validatePostBody, (req, res, next) => {
-//   const {id, fname, lname, medical_conditions, login_code, quiz_points} = req.body
-//
-//   knex('users').insert({id, fname, lname, medical_conditions, login_code, quiz_points}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
-// })
-//
+
+/* POST new users record */
+router.post('/', validatePostBody, (req, res, next) => {
+  const { id, generic_name, brand_name, pharma_company, info, photo } = req.body
+
+  knex('meds').insert({ id, generic_name, brand_name, pharma_company, info, photo }).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
+})
+
 // /* PATCH specified users record */
 // router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
 //   const {patchReq} = req
