@@ -19,21 +19,29 @@ const validateUserID = (req, res, next) => {
 }
 
 // /* Uses joi to validate data types */
-// const validatePostBody = (req, res, next) => {
-//   const postSchema = Joi.object().keys({
-//     fname: Joi.string().required(),
-//     lname: Joi.string().required(),
-//     login_code: Joi.string(),
-//     quiz_points: Joi.integer()
-//   })
-//
-//   const { error } = Joi.validate(req.body, postSchema)
-//
-//   if (error) {
-//     return res.status(400).json({ "POST Schema Error": { message: error.details[0].message } })
-//   }
-//   next()
-// }
+const validatePostBody = (req, res, next) => {
+  const postSchema = Joi.object().keys({
+    fname: Joi.string().required(),
+    lname: Joi.string().required(),
+    specialty_id: Joi.integer(),
+    npi_num: Joi.string().required(),
+    clinic_name: Joi.string(),
+    clinic_address: Joi.string(),
+    city: Joi.string(),
+    state: Joi.string(),
+    zip: Joi.integer().required,
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+    photo: Joi.string()
+  })
+
+  const { error } = Joi.validate(req.body, postSchema)
+
+  if (error) {
+    return res.status(400).json({ "POST Schema Error": { message: error.details[0].message } })
+  }
+  next()
+}
 //
 // /* Uses joi to build a patch request */
 // const buildPatchReq = (req, res, next) => {
@@ -80,11 +88,11 @@ router.get('/:id', validateUserID, (req, res, next) => {
 })
 //
 // /* POST new users record */
-// router.post('/', validatePostBody, (req, res, next) => {
-//   const {id, fname, lname, medical_conditions, login_code, quiz_points} = req.body
-//
-//   knex('users').insert({id, fname, lname, medical_conditions, login_code, quiz_points}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
-// })
+router.post('/', validatePostBody, (req, res, next) => {
+  const {id, fname, lname, medical_conditions, login_code, quiz_points} = req.body
+
+  knex('users').insert({id, fname, lname, medical_conditions, login_code, quiz_points}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
+})
 //
 // /* PATCH specified users record */
 // router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
