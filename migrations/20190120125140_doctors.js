@@ -6,7 +6,7 @@ exports.up = function (knex, Promise) {
         table.varchar(`lname`, 255).notNullable()
         table.integer(`specialties_id`).notNullable()
         table.foreign(`specialties_id`).references(`specialties.id`).onDelete(`CASCADE`)
-        table.integer(`npi_num`).notNullable().unique()
+        table.varchar(`npi_num`, 10).notNullable().unique()
         table.varchar(`clinic_name`, 255).defaultTo(`Not Provided`)
         table.varchar(`clinic_address`, 255).defaultTo(`Not Provided`)
         table.varchar(`city`, 255).defaultTo(`Not Provided`)
