@@ -23,13 +23,13 @@ const validatePostBody = (req, res, next) => {
   const postSchema = Joi.object().keys({
     fname: Joi.string().required(),
     lname: Joi.string().required(),
-    specialty_id: Joi.integer(),
+    specialties_id: Joi.number().integer(),
     npi_num: Joi.string().required(),
     clinic_name: Joi.string(),
     clinic_address: Joi.string(),
     city: Joi.string(),
     state: Joi.string(),
-    zip: Joi.integer().required,
+    zip: Joi.number().integer().required(),
     email: Joi.string().required(),
     password: Joi.string().required(),
     photo: Joi.string()
@@ -89,9 +89,26 @@ router.get('/:id', validateUserID, (req, res, next) => {
 //
 // /* POST new users record */
 router.post('/', validatePostBody, (req, res, next) => {
-  const {id, fname, lname, medical_conditions, login_code, quiz_points} = req.body
+  // const {id, fname, lname, specialty_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo} = req.body
 
-  knex('users').insert({id, fname, lname, medical_conditions, login_code, quiz_points}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
+  knex('doctors')
+  .insert({
+    'id': req.body.id,
+    'fname': req.body.fname,
+    'lname': req.body.lname,
+    'specialties_id': req.body.specialties_id,
+    'npi_num': req.body.npi_num,
+    'clinic_name': req.body.clinic_name,
+    'clinic_address': req.body.clinic_address,
+    'city': req.body.city,
+    'state': req.body.state,
+    'zip': req.body.zip,
+    'email': req.body.email,
+    'password': req.body.password,
+    'photo': req.body.photo
+  })
+    .returning('*')
+    .then(([data]) => res.status(201).json(data)).catch(err => next(err))
 })
 //
 // /* PATCH specified users record */
