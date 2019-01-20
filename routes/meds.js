@@ -36,7 +36,12 @@ const validatePostBody = (req, res, next) => {
   next()
 }
 
-/* Uses joi to build a patch request */
+/* 
+
+Uses joi to build a patch request 
+http PATCH http://localhost:3000/meds/7 generic_name='hello' brand_name='hello'
+
+*/
 const buildPatchReq = (req, res, next) => {
   const patchSchema = Joi.object().keys({
     generic_name: Joi.string().required(),
@@ -72,24 +77,37 @@ const buildPatchReq = (req, res, next) => {
   next()
 }
 
-/* GET all users record */
+/* 
+GET all users record
+http http://localhost:3000/meds
+*/
 router.get('/', (req, res, next) => {
   knex('meds').then(data => res.status(200).json(data)).catch(err => next(err))
 })
-//
-/* GET single users record */
+
+
+/* 
+GET single users record 
+http http://localhost:3000/meds/7
+*/
 router.get('/:id', validateUserID, (req, res, next) => {
   knex('meds').where('id', req.params.id).then(([data]) => res.status(200).json(data)).catch(err => next(err))
 })
 
-/* POST new users record */
+/*
+POST new users record
+http POST http://localhost:3000/meds generic_name='brand' brand_name='brand' pharma_company='Pfizer' info='nothing important' photo='good picture'
+*/
 router.post('/', validatePostBody, (req, res, next) => {
   const { id, generic_name, brand_name, pharma_company, info, photo } = req.body
 
   knex('meds').insert({ id, generic_name, brand_name, pharma_company, info, photo }).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
 })
 
-/* PATCH specified users record */
+/*
+PATCH specified users record
+http PATCH http://localhost:3000/meds/7 generic_name='hello' brand_name='hello'
+*/
 router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
   const {patchReq} = req
 
@@ -98,7 +116,10 @@ router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
   }).catch(err => next(err))
 })
 
-/* DELETE specified users record */
+/*
+DELETE specified users record
+http DELETE http://localhost:3000/meds/7
+*/
 router.delete('/:id', validateUserID, (req, res, next) => {
   knex('meds').where('id', req.params.id).first().del().returning('*').then(([data]) => {
     console.log('deleted', data)
