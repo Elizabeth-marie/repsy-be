@@ -19,21 +19,18 @@ const validateConditionsID = (req, res, next) => {
 }
 
 // /* Uses joi to validate data types */
-// const validatePostBody = (req, res, next) => {
-//   const postSchema = Joi.object().keys({
-//     fname: Joi.string().required(),
-//     lname: Joi.string().required(),
-//     login_code: Joi.string(),
-//     quiz_points: Joi.integer()
-//   })
-//
-//   const { error } = Joi.validate(req.body, postSchema)
-//
-//   if (error) {
-//     return res.status(400).json({ "POST Schema Error": { message: error.details[0].message } })
-//   }
-//   next()
-// }
+const validatePostBody = (req, res, next) => {
+  const postSchema = Joi.object().keys({
+    name: Joi.string().required(),
+    specialties_id: Joi.number().integer().required(),
+  })
+
+  const { error } = Joi.validate(req.body, postSchema)
+  if (error) {
+    return res.status(400).json({ "POST Schema Error": { message: error.details[0].message } })
+  }
+  next()
+}
 //
 // /* Uses joi to build a patch request */
 // const buildPatchReq = (req, res, next) => {
@@ -80,11 +77,12 @@ router.get('/:id', validateConditionsID, (req, res, next) => {
 })
 //
 // /* POST new users record */
-// router.post('/', validatePostBody, (req, res, next) => {
-//   const {id, fname, lname, medical_conditions, login_code, quiz_points} = req.body
-//
-//   knex('users').insert({id, fname, lname, medical_conditions, login_code, quiz_points}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
-// })
+//http post http://localhost:3000/conditions name='Cancer Cancer' specialties_id=2
+router.post('/', validatePostBody, (req, res, next) => {
+  const {name, specialties_id} = req.body
+
+  knex('conditions').insert({name, specialties_id}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
+})
 //
 // /* PATCH specified users record */
 // router.patch('/:id', validateConditionsID, buildPatchReq, (req, res, next) => {
