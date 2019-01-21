@@ -3,7 +3,7 @@ const router = express.Router()
 const knex = require('../knex')
 const Joi = require('joi')
 
-/* Validates the user's ID */
+/* Validates the doctor's ID */
 const validateUserID = (req, res, next) => {
   knex('doctors').where('id', req.params.id).then(([data]) => {
     console.log(data)
@@ -86,17 +86,17 @@ const buildPatchReq = (req, res, next) => {
   next()
 }
 //
-/* GET all users record */
+/* GET all doctors record */
 router.get('/', (req, res, next) => {
   knex('doctors').then(data => res.status(200).json(data)).catch(err => next(err))
 })
 //
-/* GET single users record */
+/* GET single doctors record */
 router.get('/:id', validateUserID, (req, res, next) => {
   knex('doctors').where('id', req.params.id).then(([data]) => res.status(200).json(data)).catch(err => next(err))
 })
 //
-// /* POST new users record */
+// /* POST new doctors record */
 router.post('/', validatePostBody, (req, res, next) => {
   // const {id, fname, lname, specialty_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo} = req.body
 
@@ -120,7 +120,7 @@ router.post('/', validatePostBody, (req, res, next) => {
     .then(([data]) => res.status(201).json(data)).catch(err => next(err))
 })
 
-/* PATCH specified users record */
+/* PATCH specified doctors record */
 router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
   const {patchReq} = req
 
@@ -130,7 +130,7 @@ router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
 })
 
 
-/* DELETE specified users record */
+/* DELETE specified doctors record */
 router.delete('/:id', validateUserID, (req, res, next) => {
   knex('doctors').where('id', req.params.id).first().del().returning('*').then(([data]) => {
     console.log('deleted', data)
