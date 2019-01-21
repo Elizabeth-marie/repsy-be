@@ -10,8 +10,8 @@ var indexRouter = require('./routes/index');
 var medsRouter = require(`./routes/meds`)
 var specialtiesRouter = require(`./routes/specialties`)
 var repsRouter = require('./routes/reps')
-var doctors_repsRouter = require('./routes/doctors_reps')
-
+//var doctors_repsRouter = require('./routes/doctors_reps')
+var conditions_medsRouter = require('./routes/conditions_meds')
 
 var app = express();
 
@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(`/`, tablenameRouter)
+
 
 app.use('/', indexRouter);
 app.use('/doctors', doctorsRouter);
@@ -32,7 +32,8 @@ app.use('/conditions', conditionsRouter);
 app.use('/meds', medsRouter)
 app.use('/specialties', specialtiesRouter)
 app.use('/reps', repsRouter)
-app.use('./doctors_reps', doctors_repsRouter)
+//app.use('/doctors_reps', doctors_repsRouter)
+app.use('/conditions_meds', conditions_medsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

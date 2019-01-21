@@ -4,7 +4,7 @@ const knex = require('../knex')
 const Joi = require('joi')
 
 /* Validates the user's ID */
-const validateconditions_medsMedsID = (req, res, next) => {
+const validateConditions_medsID = (req, res, next) => {
   knex('conditions_meds').where('id', req.params.id).then(([data]) => {
     console.log(data)
     if (!data) {
@@ -73,21 +73,21 @@ router.get('/', (req, res, next) => {
 })
 //
 /* GET single users record */
-router.get('/:id', validateconditions_medsMedsID, (req, res, next) => {
+router.get('/:id', validateConditions_medsID, (req, res, next) => {
   knex('conditions_meds').where('id', req.params.id).then(([data]) => res.status(200).json(data)).catch(err => next(err))
 })
 //
 // /* POST new users record */
 //http post http://localhost:3000/conditions_meds name='Cancer Cancer' specialties_id=2
 router.post('/', validatePostBody, (req, res, next) => {
-  const {name, specialties_id} = req.body
+  const {id, meds_id, conditions_id} = req.body
 
-  knex('conditions_meds').insert({name, specialties_id}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
+  knex('conditions_meds').insert({id, conditions_id, meds_id}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
 })
 //
 // /* PATCH specified users record */
 //http patch http://localhost:3000/conditions_meds/1 name='leg Cancer' specialties_id=1
-router.patch('/:id', validateconditions_medsMedsID, buildPatchReq, (req, res, next) => {
+router.patch('/:id', validateConditions_medsID, buildPatchReq, (req, res, next) => {
   const {patchReq} = req
 
   knex('conditions_meds')
@@ -102,7 +102,7 @@ router.patch('/:id', validateconditions_medsMedsID, buildPatchReq, (req, res, ne
 //
 // /* DELETE specified users record */
 // http delete  http://localhost:3000/conditions_meds/2
-router.delete('/:id', validateconditions_medsMedsID, (req, res, next) => {
+router.delete('/:id', validateConditions_medsID, (req, res, next) => {
   knex('conditions_meds').where('id', req.params.id).first().del().returning('*').then(([data]) => {
     console.log('deleted', data)
     res.status(200).json({deleted: data})
