@@ -12,6 +12,7 @@ var specialtiesRouter = require(`./routes/specialties`)
 var repsRouter = require('./routes/reps')
 var doctors_repsRouter = require('./routes/doctors_reps')
 var conditions_medsRouter = require('./routes/conditions_meds')
+var reps_medsRouter = require('./routes/reps_meds')
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.use('/specialties', specialtiesRouter)
 app.use('/reps', repsRouter)
 app.use('/doctors_reps', doctors_repsRouter)
 app.use('/conditions_meds', conditions_medsRouter)
+app.use('/reps_meds', reps_medsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
