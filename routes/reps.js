@@ -98,7 +98,7 @@ router.get('/', (req, res, next) => {
 
 /* 
 GET single users record 
-http http://localhost:3000/reps/7
+http http://localhost:3000/reps/3
 */
 router.get('/:id', validateUserID, (req, res, next) => {
   knex('reps').where('id', req.params.id).then(([data]) => res.status(200).json(data)).catch(err => next(err))
@@ -106,7 +106,7 @@ router.get('/:id', validateUserID, (req, res, next) => {
 
 /*
 POST new users record
-http POST http://localhost:3000/reps generic_name='brand' brand_name='brand' pharma_company='Pfizer' info='nothing important' photo='good picture'
+http POST http://localhost:3000/reps fname='Richard' lname='Hendrix' company='Pied Piper' credentials='nothing important' city='Palo Alto' state='California' zip='94020' email='Richard.Hendrix@gmail.com' password='1234' photo='good picture'
 */
 router.post('/', validatePostBody, (req, res, next) => {
   const { id, fname, lname, company, credentials, city, state, zip, email, password, photo } = req.body
@@ -116,7 +116,7 @@ router.post('/', validatePostBody, (req, res, next) => {
 
 /*
 PATCH specified users record
-http PATCH http://localhost:3000/reps/7 generic_name='hello' brand_name='hello'
+http PATCH http://localhost:3000/reps/4 fname='Richard' lname='Hendrix' company='Pied Piper' credentials='nothing important' city='Palo Alto' state='California' zip='94020' email='Richard.Hendrix@gmail.com' password='1234' photo='good picture'
 */
 router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
   const {patchReq} = req
@@ -128,7 +128,7 @@ router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
 
 /*
 DELETE specified users record
-http DELETE http://localhost:3000/reps/7
+http DELETE http://localhost:3000/reps/4
 */
 router.delete('/:id', validateUserID, (req, res, next) => {
   knex('reps').where('id', req.params.id).first().del().returning('*').then(([data]) => {
