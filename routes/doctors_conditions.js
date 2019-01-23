@@ -72,9 +72,16 @@ router.get('/', (req, res, next) => {
   knex('doctors_conditions').then(data => res.status(200).json(data)).catch(err => next(err))
 })
 //
-/* GET single users record */
-router.get('/:id', validatedoctors_conditionsID, (req, res, next) => {
-  knex('doctors_conditions').where('id', req.params.id).then(([data]) => res.status(200).json(data)).catch(err => next(err))
+/* GET all conditions for a particular doctor ID
+*/
+router.get('/:id', (req, res, next) => {
+  knex
+    .select('doctors.lname', 'doctors.fname', 'conditions.name', 'conditions.id', 'conditions.specialties_id')
+    .from('doctors_conditions')
+    .innerJoin('doctors', 'doctors.id', 'doctors_conditions.doctors_id')
+    .innerJoin('conditions', 'conditions.id', 'doctors_conditions.conditions_id')
+    .where('doctors.id', req.params.id)
+    .then(data => res.status(200).json(data)).catch(err => next(err))
 })
 //
 // /* POST new users record */
