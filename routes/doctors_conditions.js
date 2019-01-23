@@ -72,9 +72,7 @@ router.get('/', (req, res, next) => {
   knex('doctors_conditions').then(data => res.status(200).json(data)).catch(err => next(err))
 })
 //
-/* GET all conditions for a particular doctor ID. Removed middleware for testing route.
-  Ex: Pass in Doctor ID #1. Get all the conditions Dr. #1 has "favorited"
-  SQL: select doctors.fname, conditions.name, conditions.id, conditions.specialties_id from doctors_conditions inner join doctors on doctors.id = doctors_conditions.doctors_id inner join conditions on conditions.id = doctors_conditions.conditions_id where doctors.id = 2;
+/* GET all conditions for a particular doctor ID
 */
 router.get('/:id', (req, res, next) => {
   knex.raw(`select doctors.lname, doctors.fname, conditions.name, conditions.id, conditions.specialties_id from doctors_conditions inner join doctors on doctors.id = doctors_conditions.doctors_id inner join conditions on conditions.id = doctors_conditions.conditions_id where doctors.id = ?`, req.params.id).then(data => res.status(200).json(data['rows'])).catch(err => next(err))
