@@ -74,7 +74,7 @@ router.get('/', (req, res, next) => {
 //
 /* GET single users record */
 router.get('/:id', validatedoctors_conditionsID, (req, res, next) => {
-  knex('doctors_conditions').where('id', req.params.id).then(([data]) => res.status(200).json(data)).catch(err => next(err))
+  knex('doctors_conditions').where('conditions_id', req.params.id).then(data => res.status(200).json(data)).catch(err => next(err))
 })
 //
 // /* POST new users record */
