@@ -77,7 +77,7 @@ router.get('/', (req, res, next) => {
   SQL: select doctors.fname, conditions.name, conditions.id, conditions.specialties_id from doctors_conditions inner join doctors on doctors.id = doctors_conditions.doctors_id inner join conditions on conditions.id = doctors_conditions.conditions_id where doctors.id = 2;
 */
 router.get('/:id', (req, res, next) => {
-  knex.raw(`select doctors.fname, conditions.name, conditions.id, conditions.specialties_id from doctors_conditions inner join doctors on doctors.id = doctors_conditions.doctors_id inner join conditions on conditions.id = doctors_conditions.conditions_id where doctors.id = ${req.params.id}`).then(data => res.status(200).json(data['rows'])).catch(err => next(err))
+  knex.raw(`select doctors.fname, conditions.name, conditions.id, conditions.specialties_id from doctors_conditions inner join doctors on doctors.id = doctors_conditions.doctors_id inner join conditions on conditions.id = doctors_conditions.conditions_id where doctors.id = ?`, req.params.id).then(data => res.status(200).json(data['rows'])).catch(err => next(err))
 })
 //
 // /* POST new users record */
