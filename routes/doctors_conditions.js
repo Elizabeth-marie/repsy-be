@@ -75,7 +75,13 @@ router.get('/', (req, res, next) => {
 /* GET all conditions for a particular doctor ID
 */
 router.get('/:id', (req, res, next) => {
-  knex.raw(`select doctors.lname, doctors.fname, conditions.name, conditions.id, conditions.specialties_id from doctors_conditions inner join doctors on doctors.id = doctors_conditions.doctors_id inner join conditions on conditions.id = doctors_conditions.conditions_id where doctors.id = ?`, req.params.id).then(data => res.status(200).json(data['rows'])).catch(err => next(err))
+  knex
+    .select('doctors.lname', 'doctors.fname', 'conditions.name', 'conditions.id', 'conditions.specialties_id')
+    .from('doctors_conditions')
+    .innerJoin('doctors', 'doctors.id', 'doctors_conditions.doctors_id')
+    .innerJoin('conditions', 'conditions.id', 'doctors_conditions.conditions_id')
+    .where('doctors.id', req.params.id)
+    .then(data => res.status(200).json(data)).catch(err => next(err))
 })
 //
 // /* POST new users record */
