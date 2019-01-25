@@ -9,6 +9,9 @@ exports.seed = function(knex, Promise) {
         {id: 3, doctors_id: 3, conditions_id: 3 },
         {id: 4, doctors_id: 2, conditions_id: 1 },
         {id: 5, doctors_id: 3, conditions_id: 1 },
+        {id: 6, doctors_id: 2, conditions_id: 5 },
+        {id: 7, doctors_id: 2, conditions_id: 17 },
+        {id: 8, doctors_id: 2, conditions_id: 29 },
       ])
     })
     .then(function () {
