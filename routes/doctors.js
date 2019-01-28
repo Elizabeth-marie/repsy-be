@@ -10,8 +10,33 @@ require('dotenv').config()
 const routeCatch = require('./routeCatch')
 const { chkBodyParams } = require('./params')
 
+const SALT_ROUNDS = 2;
 
-/* Validates the doctor's ID */
+/* **************************************************
+*  hashAsync()
+*  Returns Promise for pswd_hash
+***************************************************** */
+function hashAsync(password) {
+  // let sHash = "";
+  return bcrypt.hash(password, SALT_ROUNDS)
+    .then((hashValue) => {
+      // sHash = hashValue;
+      // console.log("hash: ", hashValue);
+      return hashValue;
+    });
+}
+
+/* **************************************************
+*  hashCompareAsync()
+*  Returns Promise for t/f if pswd matches hash
+***************************************************** */
+function hashCompareAsync(password, pswd_hash) {
+  return bcrypt.compare(password, pswd_hash);
+}
+
+/***************************************************/
+/* Validates the doctor's ID with JOI*/
+/***************************************************/
 const validateUserID = (req, res, next) => {
   knex('doctors').where('id', req.params.id).then(([data]) => {
     console.log(data)
@@ -50,8 +75,9 @@ const validatePostBody = (req, res, next) => {
   }
   next()
 }
-//
+/****************************************/
 // /* Uses joi to build a patch request */
+/****************************************/
 const buildPatchReq = (req, res, next) => {
   const patchSchema = Joi.object().keys({
     fname: Joi.string().required(),
@@ -103,10 +129,85 @@ router.get('/', (req, res, next) => {
 router.get('/:id', validateUserID, (req, res, next) => {
   knex('doctors').where('id', req.params.id).then(([data]) => res.status(200).json(data)).catch(err => next(err))
 })
-//
+
 // /* POST new doctors record */
 router.post('/', validatePostBody, (req, res, next) => {
   // const {id, fname, lname, specialty_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo} = req.body
+
+  const { id, fname, lname, specialties_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo } = req.body
+  const oNewDoctor = {
+    id,
+    fname,
+    lname,
+    specialties_id,
+    npi_num,
+    clinic_name,
+    clinic_addres,
+    city,
+    state,
+    zip,
+    email,
+    pswd_hash: password,
+    photo,
+  }
+  console.log('!!!!!!!!!!!!!!!oNewDoctor:', oNewDoctor)
+
+
+  // check that the email address not already in use
+  knex('doctors')
+    .where('email', email)
+    .then((aRecsMatchingEmail) => {
+      if (aRecsMatchingEmail.length) {
+        console.log("fail: email address already exists");
+        res.status(409).json({ error: 'email already exists' });
+        return;
+      }
+
+      console.log("continue: email is unique");
+
+      // get the password hash
+      let pswd_hash = '';
+      hashAsync(password)
+        .then((pswd_hash) => {
+          console.log("pswd_hash ", pswd_hash);
+            oNewUser.pswd_hash = pswd_hash;
+
+
+      // add the new doctors
+    knex('doctors')
+      .insert([oNewDoctor]) // param is in the format of the fields so use destructuring
+      .returning('*') // gets array of the inserted records
+      .then((aRecs) => {
+        console.log("--> insert returning: ", aRecs);
+
+        // set login token in header and return success
+        const doctor = aRecs[0]
+        const token = getJwtLoginToken(doctor.id);
+        res.set('Auth', `Bearer: ${token}`).status(200).json({ doctor });
+        return;
+
+      })
+      .catch((error) => {
+        next(routeCatch(`--- (3) POST /doctors route, error: `, error));
+      });
+  })
+  .catch((error) => {
+    next(routeCatch(`--- (2) POST /doctors route, error: `, error));
+  });
+})
+.catch((error) => {
+next(routeCatch(`--- POST /doctors route, error: `, error));
+});
+});
+
+
+
+
+
+
+
+
+
 
   knex('doctors')
   .insert({
