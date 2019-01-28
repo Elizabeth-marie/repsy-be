@@ -203,34 +203,6 @@ next(routeCatch(`--- POST /doctors route, error: `, error));
 })
 
 
-
-
-
-
-
-
-
-
-//   knex('doctors')
-//   .insert({
-//     'id': req.body.id,
-//     'fname': req.body.fname,
-//     'lname': req.body.lname,
-//     'specialties_id': req.body.specialties_id,
-//     'npi_num': req.body.npi_num,
-//     'clinic_name': req.body.clinic_name,
-//     'clinic_address': req.body.clinic_address,
-//     'city': req.body.city,
-//     'state': req.body.state,
-//     'zip': req.body.zip,
-//     'email': req.body.email,
-//     'password': req.body.password,
-//     'photo': req.body.photo
-//   })
-//     .returning('*')
-//     .then(([data]) => res.status(201).json(data)).catch(err => next(err))
-// })
-
 /* PATCH specified doctors record */
 router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
   const {patchReq} = req
