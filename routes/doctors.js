@@ -10,7 +10,7 @@ require('dotenv').config()
 const routeCatch = require('./routeCatch')
 const { chkBodyParams } = require('./params')
 
-const SALT_ROUNDS = 2;
+const SALT_ROUNDS = 2
 
 /* **************************************************
 *  hashAsync()
@@ -22,8 +22,8 @@ function hashAsync(password) {
     .then((hashValue) => {
       // sHash = hashValue;
       // console.log("hash: ", hashValue);
-      return hashValue;
-    });
+      return hashValue
+    })
 }
 
 /* **************************************************
@@ -56,7 +56,7 @@ const validatePostBody = (req, res, next) => {
   const postSchema = Joi.object().keys({
     fname: Joi.string().required(),
     lname: Joi.string().required(),
-    specialties_id: Joi.number().integer(),
+    specialties_id: Joi.number().integer().required(),
     npi_num: Joi.string().required(),
     clinic_name: Joi.string(),
     clinic_address: Joi.string(),
@@ -90,7 +90,7 @@ const buildPatchReq = (req, res, next) => {
     state: Joi.string(),
     zip: Joi.number().integer().required(),
     email: Joi.string().required(),
-    password: Joi.string().required(),
+    pswd_hash: Joi.string().required(),
     photo: Joi.string()
   })
 
@@ -99,7 +99,7 @@ const buildPatchReq = (req, res, next) => {
     return res.status(400).json({ "PATCH Schema Error": { message: error.details[0].message } })
   }
 
-  const allowedPatchKeys = ['fname', 'lname', 'specialty_id', 'npi_num', 'clinic_name', 'clinic_address', 'city', 'state', 'zip', 'email', 'password', 'photo']
+  const allowedPatchKeys = ['fname', 'lname', 'specialties_id', 'npi_num', 'clinic_name', 'clinic_address', 'city', 'state', 'zip', 'email', 'pswd_hash', 'photo']
 
   // Constructs the patch request object
   let patchReq = {}
@@ -130,19 +130,21 @@ router.get('/:id', validateUserID, (req, res, next) => {
   knex('doctors').where('id', req.params.id).then(([data]) => res.status(200).json(data)).catch(err => next(err))
 })
 
+
+
+// http POST localhost:3000/doctors/fname="New Doctor" lname="smith" specialties_id=2, npi_num="1234567891" clinic_name="new clinic" clinic_address="12 new" city="new" state="CO" zip=12332 email=ndoc@gmail.com pswd_hash="secret"
 // /* POST new doctors record */
 router.post('/', validatePostBody, (req, res, next) => {
-  // const {id, fname, lname, specialty_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo} = req.body
+  // const {id, fname, lname, specialties_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo} = req.body
 
-  const { id, fname, lname, specialties_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo } = req.body
+  const { fname, lname, specialties_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo } = req.body
   const oNewDoctor = {
-    id,
     fname,
     lname,
     specialties_id,
     npi_num,
     clinic_name,
-    clinic_addres,
+    clinic_address,
     city,
     state,
     zip,
@@ -166,11 +168,11 @@ router.post('/', validatePostBody, (req, res, next) => {
       console.log("continue: email is unique");
 
       // get the password hash
-      let pswd_hash = '';
+      let pswd_hash = ''
       hashAsync(password)
         .then((pswd_hash) => {
           console.log("pswd_hash ", pswd_hash);
-            oNewUser.pswd_hash = pswd_hash;
+            oNewDoctor.pswd_hash = pswd_hash;
 
 
       // add the new doctors
@@ -178,7 +180,7 @@ router.post('/', validatePostBody, (req, res, next) => {
       .insert([oNewDoctor]) // param is in the format of the fields so use destructuring
       .returning('*') // gets array of the inserted records
       .then((aRecs) => {
-        console.log("--> insert returning: ", aRecs);
+        console.log("--> insert returning: ", aRecs[0].id);
 
         // set login token in header and return success
         const doctor = aRecs[0]
@@ -189,45 +191,45 @@ router.post('/', validatePostBody, (req, res, next) => {
       })
       .catch((error) => {
         next(routeCatch(`--- (3) POST /doctors route, error: `, error));
-      });
+      })
   })
   .catch((error) => {
     next(routeCatch(`--- (2) POST /doctors route, error: `, error));
-  });
+  })
 })
 .catch((error) => {
 next(routeCatch(`--- POST /doctors route, error: `, error));
-});
-});
-
-
-
-
-
-
-
-
-
-
-  knex('doctors')
-  .insert({
-    'id': req.body.id,
-    'fname': req.body.fname,
-    'lname': req.body.lname,
-    'specialties_id': req.body.specialties_id,
-    'npi_num': req.body.npi_num,
-    'clinic_name': req.body.clinic_name,
-    'clinic_address': req.body.clinic_address,
-    'city': req.body.city,
-    'state': req.body.state,
-    'zip': req.body.zip,
-    'email': req.body.email,
-    'password': req.body.password,
-    'photo': req.body.photo
-  })
-    .returning('*')
-    .then(([data]) => res.status(201).json(data)).catch(err => next(err))
 })
+})
+
+
+
+
+
+
+
+
+
+
+//   knex('doctors')
+//   .insert({
+//     'id': req.body.id,
+//     'fname': req.body.fname,
+//     'lname': req.body.lname,
+//     'specialties_id': req.body.specialties_id,
+//     'npi_num': req.body.npi_num,
+//     'clinic_name': req.body.clinic_name,
+//     'clinic_address': req.body.clinic_address,
+//     'city': req.body.city,
+//     'state': req.body.state,
+//     'zip': req.body.zip,
+//     'email': req.body.email,
+//     'password': req.body.password,
+//     'photo': req.body.photo
+//   })
+//     .returning('*')
+//     .then(([data]) => res.status(201).json(data)).catch(err => next(err))
+// })
 
 /* PATCH specified doctors record */
 router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
@@ -246,5 +248,16 @@ router.delete('/:id', validateUserID, (req, res, next) => {
     res.status(200).json({deleted: data})
   })
 })
+
+
+function getJwtLoginToken(doctorId) {
+  const payload = {
+    doctorId: doctorId,
+    loggedIn: true,
+  };
+  console.log('----- JWT_KEY: ', process.env.JWT_KEY);
+  const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '7 days' });
+  return token;
+}
 
 module.exports = router
