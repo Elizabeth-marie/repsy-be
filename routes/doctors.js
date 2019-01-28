@@ -7,6 +7,9 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
+const routeCatch = require('./routeCatch')
+const { chkBodyParams } = require('./params')
+
 
 /* Validates the doctor's ID */
 const validateUserID = (req, res, next) => {
