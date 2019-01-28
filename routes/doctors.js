@@ -5,6 +5,8 @@ const Joi = require('joi')
 
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
+
 
 /* Validates the doctor's ID */
 const validateUserID = (req, res, next) => {
