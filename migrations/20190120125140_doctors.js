@@ -13,7 +13,7 @@ exports.up = function (knex, Promise) {
         table.varchar(`state`, 255).defaultTo(`Not Provided`)
         table.integer(`zip`).notNullable()
         table.varchar(`email`, 255).notNullable().unique()
-        table.varchar(`password`, 255).notNullable()
+        table.varchar(`pswd_hash`, 255).notNullable()
         table.string(`photo`).defaultTo(`No Photo Provided`)
         table.timestamps(true, true)
     })
