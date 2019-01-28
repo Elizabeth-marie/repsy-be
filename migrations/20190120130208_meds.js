@@ -6,7 +6,7 @@ exports.up = function (knex, Promise) {
         table.varchar(`brand_name`, 255).notNullable()
         table.varchar(`pharma_company`, 255).notNullable()
         table.varchar(`info`, 255).notNullable()
-        table.string(`photo`).defaultTo(`No Photo Provided`)
+        table.string(`meds_photo`).defaultTo(`No Photo Provided`)
         table.timestamps(true, true)
     })
 }

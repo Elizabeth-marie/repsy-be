@@ -5,9 +5,9 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('reps').insert([
-        { id: 1, fname: 'Peter', lname: 'Smith', company: 'AMGEN', credentials: 'Lorem ipsum dolor sit amet. consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', city: 'Denver', state: 'Colorado', zip: '80014', email: 'Peter.Smith@gmail.com', password: '1234', photo: '' },
-        { id: 2, fname: 'Jack', lname: 'Kevorkian', company: 'entrepreneur', credentials: 'Pathologist', city: 'Pontiac', state: 'Michigan', zip: '48302', email: 'Jack.Kevorkian@gmail.com', password: '1234', photo: 'https://static01.nyt.com/images/2011/06/04/us/jpKEVORKIAN1-obit/jpKEVORKIAN1-obit-jumbo.jpg' },
-        { id: 3, fname: 'John', lname: 'Adams', company: 'Pfizer', credentials: 'Founding Father', city: 'Braintree', state: 'Massachusetts', zip: '02184', email: 'John.Adams@gmail.com', password: '1234', photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/John_Adams%2C_Gilbert_Stuart%2C_c1800_1815.jpg/800px-John_Adams%2C_Gilbert_Stuart%2C_c1800_1815.jpg' },
+        { id: 1, fname: 'Peter', lname: 'Smith', company: 'AMGEN', credentials: 'Lorem ipsum dolor sit amet. consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', city: 'Denver', state: 'Colorado', zip: '80014', email: 'Peter.Smith@gmail.com', password: '1234', reps_photo: '' },
+        { id: 2, fname: 'Jack', lname: 'Kevorkian', company: 'entrepreneur', credentials: 'Pathologist', city: 'Pontiac', state: 'Michigan', zip: '48302', email: 'Jack.Kevorkian@gmail.com', password: '1234', reps_photo: 'https://static01.nyt.com/images/2011/06/04/us/jpKEVORKIAN1-obit/jpKEVORKIAN1-obit-jumbo.jpg' },
+        { id: 3, fname: 'John', lname: 'Adams', company: 'Pfizer', credentials: 'Founding Father', city: 'Braintree', state: 'Massachusetts', zip: '02184', email: 'John.Adams@gmail.com', password: '1234', reps_photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/John_Adams%2C_Gilbert_Stuart%2C_c1800_1815.jpg/800px-John_Adams%2C_Gilbert_Stuart%2C_c1800_1815.jpg' },
       ])
     })
     .then(function () {

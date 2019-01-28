@@ -78,7 +78,7 @@ GET a list of reps for a particular med id
 */
 router.get('/:id', (req, res, next) => {
   knex
-    .select('reps.lname', 'reps.fname', 'reps.company', 'reps.id', 'reps.city', 'reps.state', 'reps.zip', 'reps.credentials', 'reps.photo', 'reps.email',   'meds.generic_name', 'meds.brand_name', 'meds.pharma_company', 'meds.info', 'meds.photo')
+    .select('reps.lname', 'reps.fname', 'reps.company', 'reps.id', 'reps.city', 'reps.state', 'reps.zip', 'reps.credentials', 'reps.reps_photo', 'reps.email',   'meds.generic_name', 'meds.brand_name', 'meds.pharma_company', 'meds.info', 'meds.meds_photo')
     .from('reps_meds')
     .innerJoin('meds', 'meds.id', 'reps_meds.meds_id')
     .innerJoin('reps', 'reps.id', 'reps_meds.reps_id')
