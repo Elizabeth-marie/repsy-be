@@ -131,11 +131,11 @@ router.get('/:id', validateUserID, (req, res, next) => {
 })
 
 
-
-// http POST localhost:3000/doctors/fname="New Doctor" lname="smith" specialties_id=2, npi_num="1234567891" clinic_name="new clinic" clinic_address="12 new" city="new" state="CO" zip=12332 email=ndoc@gmail.com pswd_hash="secret"
-// /* POST new doctors record */
+/****************************************************************/
+// http POST localhost:3000/doctors/ fname="New Doctor" lname="smith" specialties_id=2 npi_num="1234567891" clinic_name="new clinic" clinic_address="12 new" city="new" state="CO" zip=12332 email=ndoc@gmail.com password="secret"
+// /* POST NEW DOCTORS FOR LOGIN */
+/***************************************************************/
 router.post('/', validatePostBody, (req, res, next) => {
-  // const {id, fname, lname, specialties_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo} = req.body
 
   const { fname, lname, specialties_id, npi_num, clinic_name, clinic_address, city, state, zip, email, password, photo } = req.body
   const oNewDoctor = {
@@ -202,6 +202,98 @@ next(routeCatch(`--- POST /doctors route, error: `, error));
 })
 })
 
+/****************************************************/
+//LOGIN ROUTE POST RETURNING DOCTOR LOGIN
+/***************************************************/
+/* **************************************************
+*  Try to log in the user, if successful set JWT in header
+*  @body email (string)
+*  @body password (string)
+*  Return
+*    200 { user: { fname, lname, ... } }
+*    403 { error: 'email not found'}
+*    403 { error: 'password doesn't match }
+http POST localhost:3000/doctors/login email=doctorharry@gmail.com, password=pswd_hash
+http POST localhost:3000/doctors/login email=rjones@gmail.com, password=pswd_hash1
+http POST localhost:3000/users/login email=trying5@gmail.com password=$2a$04$8drhAAhb002UzshWJVBYUufme5JBdT8K2T83m78KbYdB505N5NPyq
+***************************************************** */
+router.post('/login', (req, res, next) => {
+  console.log('$$$$$$$$$$$$$$$$$REQ', req)
+  console.log(`-- POST /users/login route`);
+  const oParams = {
+    email: 'string',
+    password: 'string',
+  };
+  console.log('((()))', oParams)
+  if (!chkBodyParams(oParams, req, res, next)) {
+    return;
+  }
+  const { email, password } = req.body;
+  console.log("email, password: ", email, password);
+  knex("doctors")
+    .where('email', email)
+    .then((aRecs) => {
+      if (!aRecs.length) {
+        console.log("fail: email not found");
+        res.status(403).json({ error: 'email not found' });
+        return;
+      }
+      const doctor = aRecs[0];
+      console.log('email found');
+      const { pswd_hash } = aRecs[0];
+      console.log('pswd hash: ', pswd_hash);
+      hashCompareAsync(password, pswd_hash)
+        .then((match) => {
+          if (!match) {
+            console.log("fail: pswd bad");
+            res.status(403).json({ error: 'incorrect password' });
+            return;
+          }
+
+          // set login token in header and return success
+          const token = getJwtLoginToken(doctor.id);
+          res.set('Auth', `Bearer: ${token}`).status(200).json({ doctor });
+          return;
+
+          // // setup the JWT
+          // const payload = {
+          //   userId: user.id,
+          //   loggedIn: true,
+          // };
+          // console.log('----- JWT_KEY: ', process.env.JWT_KEY);
+          // const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '7 days' });
+          //
+          // // set token in header and return success
+          // res.set('Auth', `Bearer: ${token}`).status(200).json({ user });
+          // return;
+        })
+        .catch((error) => {
+          next(routeCatch(`--- GET /doctors route`, error));
+        })
+      })
+    .catch((error) => {
+      next(routeCatch(`--- GET /doctors route`, error));
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* PATCH specified doctors record */
 router.patch('/:id', validateUserID, buildPatchReq, (req, res, next) => {
@@ -221,7 +313,9 @@ router.delete('/:id', validateUserID, (req, res, next) => {
   })
 })
 
-
+//***************************************/
+//GET JWT TOKEN FUNCTION
+/***************************************/
 function getJwtLoginToken(doctorId) {
   const payload = {
     doctorId: doctorId,
