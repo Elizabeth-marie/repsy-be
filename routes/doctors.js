@@ -3,6 +3,9 @@ const router = express.Router()
 const knex = require('../knex')
 const Joi = require('joi')
 
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
 /* Validates the doctor's ID */
 const validateUserID = (req, res, next) => {
   knex('doctors').where('id', req.params.id).then(([data]) => {
