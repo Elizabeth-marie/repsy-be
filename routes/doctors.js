@@ -213,9 +213,7 @@ next(routeCatch(`--- POST /doctors route, error: `, error));
 *    200 { user: { fname, lname, ... } }
 *    403 { error: 'email not found'}
 *    403 { error: 'password doesn't match }
-http POST localhost:3000/doctors/login email=doctorharry@gmail.com, password=pswd_hash
-http POST localhost:3000/doctors/login email=rjones@gmail.com, password=pswd_hash1
-http POST localhost:3000/users/login email=trying5@gmail.com password=$2a$04$8drhAAhb002UzshWJVBYUufme5JBdT8K2T83m78KbYdB505N5NPyq
+http POST localhost:3000/doctors/login email=ndoc@gmail.com password="secret"
 ***************************************************** */
 router.post('/login', (req, res, next) => {
   console.log('$$$$$$$$$$$$$$$$$REQ', req)
@@ -255,17 +253,6 @@ router.post('/login', (req, res, next) => {
           res.set('Auth', `Bearer: ${token}`).status(200).json({ doctor });
           return;
 
-          // // setup the JWT
-          // const payload = {
-          //   userId: user.id,
-          //   loggedIn: true,
-          // };
-          // console.log('----- JWT_KEY: ', process.env.JWT_KEY);
-          // const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '7 days' });
-          //
-          // // set token in header and return success
-          // res.set('Auth', `Bearer: ${token}`).status(200).json({ user });
-          // return;
         })
         .catch((error) => {
           next(routeCatch(`--- GET /doctors route`, error));
@@ -273,24 +260,43 @@ router.post('/login', (req, res, next) => {
       })
     .catch((error) => {
       next(routeCatch(`--- GET /doctors route`, error));
-    });
-});
+    })
+})
 
+/* **************************************************
+*  POST /logout
+*  Log the user out if they are logged in
+*    resets the JWT payload loggedIn to false
+*  @body email (string)
+*  @body password (string)
+*  Return
+*    200 { message: 'success' }
+http POST localhost:3000/users/logout
+***************************************************** */
+router.post('/logout', (req, res, next) => {
+  console.log(`-- POST /users/logout route`);
 
+  // is there a JWT??
+  // check that a auth token is even passed
+  const auth = req.headers.auth;
+  if (!auth) {
+    console.log("-- no auth token");
+  } else {
+    console.log('-- auth token: ', auth);
+  }
 
+  // setup the JWT
+  const payload = {
+    doctorId: 0,
+    loggedIn: false,
+  };
+  console.log('----- JWT_KEY: ', process.env.JWT_KEY);
+  const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '7 days' });
 
-
-
-
-
-
-
-
-
-
-
-
-
+  // set token in header and return success
+  res.set('Auth', `Bearer: ${token}`).status(200).json({ message: 'success' });
+  return
+})
 
 
 
