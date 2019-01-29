@@ -11,7 +11,7 @@ exports.seed = function(knex, Promise) {
         {id: 4, name: 'Brain Tumors', specialties_id: 1},
         {id: 5, name: 'Breast Cancer', specialties_id: 1},
         {id: 6, name: 'Cervical Cancer', specialties_id: 1},
-        {id: 7, name: 'Colo and Rectal Cancer', specialties_id: 1},
+        {id: 7, name: 'Colon and Rectal Cancer', specialties_id: 1},
         {id: 8, name: 'Endometrial Cancer', specialties_id: 1},
         {id: 9, name: 'Esophageal Cancer', specialties_id: 1},
         {id: 10, name: 'Gastrointestinal Stromal Tumors', specialties_id: 1},
