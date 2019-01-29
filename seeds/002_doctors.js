@@ -4,7 +4,7 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('doctors').insert([
-        {id: 1, fname: 'Harrison', lname: 'McDonald', specialties_id: 1, npi_num: '1111111111', clinic_name: 'Boulder Family Practice', clinic_address: '24 South Street', city: 'Boulder', state: 'CO', zip: 80303, email: 'doctorharry@gmail.com', pswd_hash: 'pswd_hash', photo: ''},
+        {id: 1, fname: 'Harrison', lname: 'McDonald', specialties_id: 1, npi_num: '1111111111', clinic_name: 'Boulder Family Practice', clinic_address: '24 South Street', city: 'Boulder', state: 'CO', zip: 80303, email: 'doctorharry@gmail.com', pswd_hash: 'pswd', photo: ''},
         {id: 2, fname: 'Rebecca', lname: 'Jones', specialties_id: 1, npi_num: '2222222222' , clinic_name: 'Nantucket Medical Facility', clinic_address: '1589 Petunia Ave', city: 'Nantucket', state: 'MA', zip: 02554, email: 'rjones@gmail.com', pswd_hash: 'pswd_hash1', photo: ''},
         {id: 3, fname: 'Georgia', lname: 'Smith', specialties_id: 1, npi_num: '3333333333', clinic_name: 'Charleston Medical Clinic', clinic_address: '5779 Broad Street', city: 'Charleston', state: 'SC', zip: 29401, email: 'georgiasmith@gmail.com', pswd_hash: 'pswd_hash2', photo: ''},
         {id: 4, fname: 'Michael', lname: 'Connely', specialties_id: 3, npi_num: '4444444444', clinic_name: 'Holistic Family Practice', clinic_address: '1322 Snowflake Drive', city: 'Omaha', state: 'NE', zip: 78007, email: 'connely.michael@gmail.com', pswd_hash: 'pswd_hash3', photo: ''},
