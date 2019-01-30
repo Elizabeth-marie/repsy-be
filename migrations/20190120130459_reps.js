@@ -11,7 +11,7 @@ exports.up = function (knex, Promise) {
         table.integer(`zip`).notNullable()
         table.varchar(`email`, 255).notNullable().unique()
         table.varchar(`password`, 255).notNullable()
-        table.string(`reps_photo`).defaultTo(`No Photo Provided`)
+        table.string(`reps_photo`).defaultTo(`https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png`)
         table.timestamps(true, true)
     })
 }
