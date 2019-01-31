@@ -9,6 +9,7 @@ exports.up = function (knex, Promise) {
         table.varchar(`city`, 255).defaultTo(`Not Provided`)
         table.varchar(`state`, 255).defaultTo(`Not Provided`)
         table.integer(`zip`).notNullable()
+        table.varchar('timekitId', 255).defaultTo('Not Provided')
         table.varchar(`email`, 255).notNullable().unique()
         table.varchar(`password`, 255).notNullable()
         table.string(`reps_photo`).defaultTo(`https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png`)

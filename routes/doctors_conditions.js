@@ -76,7 +76,7 @@ router.get('/', (req, res, next) => {
 */
 router.get('/:id', (req, res, next) => {
   knex
-    .select('doctors_conditions.id','doctors.lname', 'doctors.fname', 'conditions.name', 'conditions.id', 'conditions.specialties_id')
+    .select('join_id', 'doctors.lname', 'doctors.fname', 'conditions.name', 'conditions.id', 'conditions.specialties_id')
     .from('doctors_conditions')
     .innerJoin('doctors', 'doctors.id', 'doctors_conditions.doctors_id')
     .innerJoin('conditions', 'conditions.id', 'doctors_conditions.conditions_id')
