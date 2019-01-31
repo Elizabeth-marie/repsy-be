@@ -76,7 +76,7 @@ router.get('/', (req, res, next) => {
 */
 router.get('/:id', (req, res, next) => {
   knex
-    .select('join_id', 'doctors.lname', 'doctors.fname', 'conditions.name', 'conditions.id', 'conditions.specialties_id')
+    .select('doctors_conditions.id as join_id', 'doctors.lname', 'doctors.fname', 'conditions.name', 'conditions.id', 'conditions.specialties_id')
     .from('doctors_conditions')
     .innerJoin('doctors', 'doctors.id', 'doctors_conditions.doctors_id')
     .innerJoin('conditions', 'conditions.id', 'doctors_conditions.conditions_id')
@@ -85,7 +85,7 @@ router.get('/:id', (req, res, next) => {
 })
 //
 // /* POST new users record */
-//http post http://localhost:3000/doctors_conditions name='Cancer Cancer' specialties_id=2
+//http post http://localhost:3000/doctors_conditions doctors_id=1 conditions_id=15
 router.post('/', validatePostBody, (req, res, next) => {
   const {join_id, doctors_id, conditions_id} = req.body
 
