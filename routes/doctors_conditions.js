@@ -87,9 +87,10 @@ router.get('/:id', (req, res, next) => {
 // /* POST new users record */
 //http post http://localhost:3000/doctors_conditions name='Cancer Cancer' specialties_id=2
 router.post('/', validatePostBody, (req, res, next) => {
-  const {id, doctors_id, conditions_id} = req.body
+  const {join_id, doctors_id, conditions_id} = req.body
 
-  knex('doctors_conditions').insert({id, conditions_id, doctors_id}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
+  knex('doctors_conditions').insert({join_id, conditions_
+    , doctors_id}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
 })
 //
 // /* PATCH specified users record */
