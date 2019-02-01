@@ -30,7 +30,7 @@ const validatePostBody = (req, res, next) => {
     zip: Joi.number(),
     email: Joi.string().required(),
     password: Joi.string().required(),
-    photo: Joi.string(),
+    reps_photo: Joi.string(),
   })
 
   const { error } = Joi.validate(req.body, postSchema)
@@ -41,9 +41,9 @@ const validatePostBody = (req, res, next) => {
   next()
 }
 
-/* 
+/*
 
-Uses joi to build a patch request 
+Uses joi to build a patch request
 http PATCH http://localhost:3000/reps/7 generic_name='hello' brand_name='hello'
 
 */
@@ -87,7 +87,7 @@ const buildPatchReq = (req, res, next) => {
   next()
 }
 
-/* 
+/*
 GET all users record
 http http://localhost:3000/reps
 */
@@ -96,8 +96,8 @@ router.get('/', (req, res, next) => {
 })
 
 
-/* 
-GET single users record 
+/*
+GET single users record
 http http://localhost:3000/reps/3
 */
 router.get('/:id', validateUserID, (req, res, next) => {
