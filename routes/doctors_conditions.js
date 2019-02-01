@@ -89,8 +89,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', validatePostBody, (req, res, next) => {
   const {join_id, doctors_id, conditions_id} = req.body
 
-  knex('doctors_conditions').insert({join_id, conditions_
-    , doctors_id}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
+  knex('doctors_conditions').insert({conditions_id, doctors_id}).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
 })
 //
 // /* PATCH specified users record */
@@ -109,7 +108,7 @@ router.patch('/:id', validatedoctors_conditionsID, buildPatchReq, (req, res, nex
 })
 //
 // /* DELETE specified users record */
-// http delete  http://localhost:3000/doctors_conditions/2 
+// http delete  http://localhost:3000/doctors_conditions/2
 // id is the unique id of the join table reference
 router.delete('/:id', validatedoctors_conditionsID, (req, res, next) => {
   knex('doctors_conditions').where('id', req.params.id).first().del().returning('*').then(([data]) => {
