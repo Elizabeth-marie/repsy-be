@@ -76,7 +76,7 @@ router.get('/', (req, res, next) => {
 */
 router.get('/:id', (req, res, next) => {
   knex
-    .select('doctors.lname', 'doctors.fname', 'conditions.name', 'conditions.id', 'conditions.specialties_id')
+    .select('doctors_conditions.id as join_id', 'doctors.lname', 'doctors.fname', 'conditions.name', 'conditions.id', 'conditions.specialties_id')
     .from('doctors_conditions')
     .innerJoin('doctors', 'doctors.id', 'doctors_conditions.doctors_id')
     .innerJoin('conditions', 'conditions.id', 'doctors_conditions.conditions_id')
@@ -109,7 +109,8 @@ router.patch('/:id', validatedoctors_conditionsID, buildPatchReq, (req, res, nex
 })
 //
 // /* DELETE specified users record */
-// http delete  http://localhost:3000/doctors_conditions/2
+// http delete  http://localhost:3000/doctors_conditions/2 
+// id is the unique id of the join table reference
 router.delete('/:id', validatedoctors_conditionsID, (req, res, next) => {
   knex('doctors_conditions').where('id', req.params.id).first().del().returning('*').then(([data]) => {
     console.log('deleted', data)
