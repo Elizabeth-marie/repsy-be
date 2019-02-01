@@ -58,7 +58,7 @@ const buildPatchReq = (req, res, next) => {
     zip: Joi.number(),
     email: Joi.string().required(),
     password: Joi.string().required(),
-    photo: Joi.string(),
+    reps_photo: Joi.string(),
   })
 
   const { error } = Joi.validate(req.body, patchSchema)
@@ -66,7 +66,7 @@ const buildPatchReq = (req, res, next) => {
     return res.status(400).json({ "PATCH Schema Error": { message: error.details[0].message } })
   }
 
-  const allowedPatchKeys = [ 'fname', 'lname', 'company', 'credentials', 'city', 'state', 'zip', 'email', 'password', 'photo']
+  const allowedPatchKeys = [ 'fname', 'lname', 'company', 'credentials', 'city', 'state', 'zip', 'email', 'password', 'reps_photo']
 
   // Constructs the patch request object
   let patchReq = {}
@@ -106,12 +106,12 @@ router.get('/:id', validateUserID, (req, res, next) => {
 
 /*
 POST new users record
-http POST http://localhost:3000/reps fname='Richard' lname='Hendrix' company='Pied Piper' credentials='nothing important' city='Palo Alto' state='California' zip='94020' email='Richard.Hendrix@gmail.com' password='1234' photo='good picture'
+http POST http://localhost:3000/reps fname='Richard' lname='Hendrix' company='Pied Piper' credentials='nothing important' city='Palo Alto' state='California' zip='94020' email='Richard.Hendrix@gmail.com' password='1234' reps_photo='https://icdn2.digitaltrends.com/image/shows-to-stream-john-wick-2.jpg'
 */
 router.post('/', validatePostBody, (req, res, next) => {
-  const { id, fname, lname, company, credentials, city, state, zip, email, password, photo } = req.body
+  const { id, fname, lname, company, credentials, city, state, zip, email, password, reps_photo } = req.body
 
-  knex('reps').insert({ id, fname, lname, company, credentials, city, state, zip, email, password, photo }).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
+  knex('reps').insert({ id, fname, lname, company, credentials, city, state, zip, email, password, reps_photo }).returning('*').then(([data]) => res.status(201).json(data)).catch(err => next(err))
 })
 
 /*
