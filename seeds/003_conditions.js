@@ -5,7 +5,6 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('conditions').insert([
-        {id: 1, name: 'Anal Cancer', specialties_id: 1},
         {id: 2, name: 'Bladder Cancer', specialties_id: 1},
         {id: 3, name: 'Bone Cancer', specialties_id: 1},
         {id: 4, name: 'Brain Tumors', specialties_id: 1},
